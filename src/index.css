@@ -2,15 +2,20 @@
 @import "tailwindcss";
 
 @theme {
-  /* Royal Maroon & Emerald Color Palette */
-  --color-brand-beige: #097969; /* Rich Emerald */
-  --color-brand-beige-deep: #722F37; /* Deep Maroon / Wine */
-  --color-brand-champagne: #FDFBF7; /* Ivory */
-  --color-brand-ivory: #FAF9F6; /* Cream */
-  --color-brand-gold: #D4AF37; /* Metallic Gold */
-  --color-brand-gold-light: #F3E5AB;
-  --color-brand-mocha: #3B1C22; /* Very dark maroon for text */
-  --color-brand-sand: #EAE3D2; /* Light Sand */
+  /* Sage & Ivory Pastel Palette (from bridal fabric) */
+  --color-brand-beige: #8AAE92; /* Sage green */
+  --color-brand-beige-deep: #47705A; /* Deep sage – primary accent / text accent */
+  --color-brand-champagne: #F5F0E6; /* Warm ivory */
+  --color-brand-ivory: #FBF9F4; /* Embroidered ivory */
+  --color-brand-gold: #C9A96A; /* Soft gold thread */
+  --color-brand-gold-light: #EFE4C8;
+  --color-brand-mocha: #2E3A32; /* Deep green-charcoal text */
+  --color-brand-sand: #E6E9DF; /* Pale sage mist */
+  --color-brand-blush: #EBB0B4; /* Embroidery pink */
+  --color-brand-peach: #F2C1A6; /* Embroidery peach */
+  --color-brand-sky: #ABD4DB; /* Embroidery powder blue */
+  --color-brand-mist: #EAF1EB; /* Soft sage wash */
+  --color-brand-sage-light: #CFE0D3; /* Light sage */
 
   --font-serif: "Cormorant Garamond", serif;
   --font-display: "Great Vibes", cursive;
@@ -67,8 +72,8 @@ html, body {
   color: var(--color-brand-mocha) !important;
 }
 .text-stone-500 {
-  color: #722F37 !important; /* Maroon */
+  color: #56675B !important; /* Muted sage-grey */
 }
 .text-stone-400 {
-  color: #097969 !important; /* Emerald */
+  color: #6B7D71 !important; /* Soft sage-grey */
 }

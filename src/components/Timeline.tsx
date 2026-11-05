@@ -1,9 +1,10 @@
 import React from 'react';
+import { WEDDING } from '../config';
 import { motion } from 'motion/react';
 import { Heart, Music, Camera, Utensils, PartyPopper } from 'lucide-react';
 
 const events = [
-  { time: '09:00 AM', title: 'Poruwa Ceremony', icon: Music, desc: 'The traditional and sacred Poruwa ceremony at Hilton Colombo' },
+  { time: '09:00 AM', title: 'Poruwa Ceremony', icon: Music, desc: `The traditional and sacred Poruwa ceremony at ${WEDDING.venueFull}` },
   { time: '10:00 AM', title: 'Function Starts', icon: Heart, desc: 'A warm welcome to our loved ones' },
   { time: '12:30 PM', title: 'Buffet opening', icon: Utensils, desc: 'A grand celebratory feast' },
   { time: '04:00 PM', title: 'Wedding send off', icon: PartyPopper, desc: 'Farewell as we begin our journey together' },
@@ -22,7 +23,7 @@ export const Timeline: React.FC = () => {
 
       <div className="relative">
         {/* Vertical Line */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-brand-beige/20 to-transparent" />
+        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-brand-beige/60 to-transparent" />
 
         <div className="space-y-24">
           {events.map((event, index) => (
@@ -42,8 +43,8 @@ export const Timeline: React.FC = () => {
               </div>
 
               {/* Icon Node */}
-              <div className="relative z-10 w-12 h-12 rounded-full bg-white border border-brand-beige/30 flex items-center justify-center shadow-xl">
-                <event.icon className="w-5 h-5 text-brand-beige-deep" />
+              <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-brand-beige to-brand-beige-deep border-2 border-white flex items-center justify-center shadow-xl">
+                <event.icon className="w-5 h-5 text-white" />
               </div>
 
               {/* Content */}

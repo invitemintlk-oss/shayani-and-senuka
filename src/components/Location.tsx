@@ -1,11 +1,12 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { MapPin, Navigation, Compass, Map } from 'lucide-react';
+import { WEDDING } from '../config';
 
 export const Location: React.FC = () => {
-  const venueAddress = "Hilton Colombo";
-  const mapUrl = `https://maps.google.com/maps?q=Hilton+Colombo&t=&z=14&ie=UTF8&iwloc=&output=embed`;
-  const liveLocationUrl = "https://maps.app.goo.gl/d7QQvgGSUQEUGNzx5";
+  const venueAddress = WEDDING.venueFull;
+  const mapUrl = WEDDING.mapsEmbed;
+  const liveLocationUrl = WEDDING.mapsLink;
 
   return (
     <div className="max-w-[85rem] mx-auto px-6 relative py-12">
@@ -22,7 +23,7 @@ export const Location: React.FC = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="w-full lg:w-[45%] z-20"
         >
-          <div className="bg-white/90 backdrop-blur-2xl p-10 sm:p-14 lg:p-16 rounded-[2.5rem] shadow-[0_30px_60px_rgba(176,137,104,0.15)] border border-brand-beige/30 lg:translate-x-12 relative overflow-hidden group">
+          <div className="bg-white/90 backdrop-blur-2xl p-10 sm:p-14 lg:p-16 rounded-[2.5rem] shadow-[0_30px_60px_rgba(71,112,90,0.15)] border border-brand-beige/30 lg:translate-x-12 relative overflow-hidden group">
             
             {/* Elegant top border gradient */}
             <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-brand-champagne via-brand-beige to-brand-beige-deep" />
@@ -45,8 +46,8 @@ export const Location: React.FC = () => {
                   <MapPin className="text-brand-beige-deep w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-2xl font-serif text-stone-800 mb-1">Hilton Colombo</p>
-                  <p className="text-[11px] uppercase tracking-[0.2em] font-medium text-stone-400 leading-relaxed mb-6">Colombo</p>
+                  <p className="text-2xl font-serif text-stone-800 mb-1">{WEDDING.venueName}</p>
+                  <p className="text-[11px] uppercase tracking-[0.2em] font-medium text-stone-400 leading-relaxed mb-6">{WEDDING.venueCity}</p>
                   
                   <p className="text-stone-500/90 italic font-serif text-lg leading-relaxed max-w-sm mb-10 pl-4 border-l-[1.5px] border-brand-beige/40">
                     "A serene and elegant setting where we will begin our new chapter together."
@@ -56,9 +57,9 @@ export const Location: React.FC = () => {
                     href={liveLocationUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-3 bg-stone-800 text-brand-champagne px-8 py-4 rounded-full font-sans tracking-[0.2em] text-xs uppercase hover:bg-stone-900 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-all duration-300 active:scale-95 group/btn"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-brand-beige to-brand-beige-deep text-white px-8 py-4 rounded-full font-sans tracking-[0.2em] text-xs uppercase hover:brightness-110 hover:shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-all duration-300 active:scale-95 group/btn"
                   >
-                    <Navigation className="w-4 h-4 text-brand-gold group-hover/btn:rotate-45 transition-transform duration-300" />
+                    <Navigation className="w-4 h-4 text-brand-gold-light group-hover/btn:rotate-45 transition-transform duration-300" />
                     Open Live Location
                   </a>
                 </div>
@@ -85,7 +86,7 @@ export const Location: React.FC = () => {
             <div className="absolute inset-0 bg-brand-beige/10 mix-blend-multiply pointer-events-none z-20 group-hover/map:opacity-0 transition-opacity duration-1000" />
             
             <iframe
-              title="Hilton Colombo Location"
+              title={`${venueAddress} Location`}
               src={mapUrl}
               width="100%"
               height="100%"

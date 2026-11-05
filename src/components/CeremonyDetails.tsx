@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Clock, Calendar, MapPin, Heart, Sparkles } from 'lucide-react';
+import { WEDDING } from '../config';
 
 export const CeremonyDetails: React.FC = () => {
   return (
@@ -30,7 +31,7 @@ export const CeremonyDetails: React.FC = () => {
             </h2>
 
             <p className="text-stone-500/90 font-serif text-lg sm:text-xl leading-relaxed mb-16 max-w-lg">
-              We are honored to invite you to witness our union as we exchange vows at Hilton Colombo, surrounded by the warmth of our loved ones.
+              We are honored to invite you to witness our union as we exchange vows at {WEDDING.venueFull}, surrounded by the warmth of our loved ones.
             </p>
 
             {/* Premium Timeline */}
@@ -38,34 +39,34 @@ export const CeremonyDetails: React.FC = () => {
 
               {/* Calendar */}
               <div className="relative group">
-                <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-beige/40 shadow-lg flex items-center justify-center group-hover:border-brand-beige-deep group-hover:shadow-[0_4px_15px_rgba(176,137,104,0.3)] transition-all duration-500">
+                <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-beige/40 shadow-lg flex items-center justify-center group-hover:border-brand-beige-deep group-hover:shadow-[0_4px_15px_rgba(71,112,90,0.3)] transition-all duration-500">
                   <Calendar className="w-5 h-5 text-brand-beige-deep group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-beige-deep transition-colors duration-500">Tuesday, January 05</h4>
-                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">The Year Two Thousand Twenty Seven</p>
+                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-beige-deep transition-colors duration-500">{WEDDING.dateDayMonth}</h4>
+                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">{WEDDING.yearInWords}</p>
                 </div>
               </div>
 
               {/* Clock */}
               <div className="relative group">
-                <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-beige/40 shadow-lg flex items-center justify-center group-hover:border-brand-beige-deep group-hover:shadow-[0_4px_15px_rgba(176,137,104,0.3)] transition-all duration-500">
+                <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-beige/40 shadow-lg flex items-center justify-center group-hover:border-brand-beige-deep group-hover:shadow-[0_4px_15px_rgba(71,112,90,0.3)] transition-all duration-500">
                   <Clock className="w-5 h-5 text-brand-beige-deep group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-beige-deep transition-colors duration-500">09:00 AM</h4>
-                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">Wedding Ceremony — Hilton, Colombo</p>
+                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-beige-deep transition-colors duration-500">{WEDDING.ceremonyTime}</h4>
+                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">Wedding Ceremony — {WEDDING.venueFull}</p>
                 </div>
               </div>
 
               {/* Location */}
               <div className="relative group">
-                <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-beige/40 shadow-lg flex items-center justify-center group-hover:border-brand-beige-deep group-hover:shadow-[0_4px_15px_rgba(176,137,104,0.3)] transition-all duration-500">
+                <div className="absolute top-1/2 -translate-y-1/2 -left-[64px] sm:-left-[74px] w-12 h-12 bg-white rounded-full border border-brand-beige/40 shadow-lg flex items-center justify-center group-hover:border-brand-beige-deep group-hover:shadow-[0_4px_15px_rgba(71,112,90,0.3)] transition-all duration-500">
                   <MapPin className="w-5 h-5 text-brand-beige-deep group-hover:scale-110 transition-transform duration-500" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-beige-deep transition-colors duration-500">Hilton Colombo</h4>
-                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">Colombo</p>
+                  <h4 className="font-serif text-2xl sm:text-3xl text-stone-800 mb-2 group-hover:text-brand-beige-deep transition-colors duration-500">{WEDDING.venueName}</h4>
+                  <p className="text-stone-500/80 text-[10px] sm:text-[11px] uppercase tracking-[0.3em] font-bold">{WEDDING.venueCity}</p>
                 </div>
               </div>
             </div>
@@ -86,7 +87,7 @@ export const CeremonyDetails: React.FC = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-champagne/40 rounded-[2rem] sm:rounded-[3rem] blur-2xl -z-20" />
 
             {/* Main Creative Image Frame */}
-            <div className="relative aspect-[3/4] sm:aspect-[4/5] rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-[6px] sm:border-[8px] border-white shadow-[0_20px_50px_rgba(176,137,104,0.2)] bg-white group">
+            <div className="relative aspect-[3/4] sm:aspect-[4/5] rounded-[2rem] sm:rounded-[3rem] overflow-hidden border-[6px] sm:border-[8px] border-white shadow-[0_20px_50px_rgba(71,112,90,0.2)] bg-white group">
               <img
                 src="/2.jpg"
                 onError={(e) => {
@@ -110,7 +111,7 @@ export const CeremonyDetails: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.6, duration: 1, ease: "easeOut" }}
-            className="mt-10 sm:mt-14 bg-white/85 backdrop-blur-xl p-6 sm:p-10 shadow-[0_30px_60px_rgba(176,137,104,0.15)] rounded-2xl border border-white relative overflow-hidden"
+            className="mt-10 sm:mt-14 bg-white/85 backdrop-blur-xl p-6 sm:p-10 shadow-[0_30px_60px_rgba(71,112,90,0.15)] rounded-2xl border border-white relative overflow-hidden"
           >
             <div className="absolute inset-x-8 -top-px h-[2px] bg-gradient-to-r from-transparent via-brand-beige-deep/60 to-transparent" />
             <div className="relative flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
@@ -121,7 +122,7 @@ export const CeremonyDetails: React.FC = () => {
               <div className="flex-1">
                 <h4 className="font-display text-2xl sm:text-4xl text-stone-800 mb-1 sm:mb-2 tracking-tight">The Celebration</h4>
                 <p className="text-stone-500/90 font-serif text-sm sm:text-base leading-relaxed">
-                  Followed by a grand celebratory buffet and festivities at Hilton Colombo.
+                  Followed by a grand celebratory buffet and festivities at {WEDDING.venueFull}.
                 </p>
               </div>
               <div className="inline-block px-4 sm:px-6 py-2 sm:py-3 bg-brand-champagne rounded-full border border-brand-beige/30 shadow-sm self-start sm:self-center flex-shrink-0">

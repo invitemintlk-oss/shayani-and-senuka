@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Loader2, Heart, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
+import { GOOGLE_SCRIPT_URL, getGuestDisplayName } from '../config';
 
 export const RSVPForm: React.FC = () => {
   const [formData, setFormData] = useState({
     fullName: '',
+    attendance: 'Yes',
     guests: '1',
     dietaryNotes: '',
   });
@@ -15,24 +18,28 @@ export const RSVPForm: React.FC = () => {
     setStatus('loading');
 
     try {
-      const scriptUrl = 'https://script.google.com/macros/s/AKfycbyay20jbF63BRUj8JGGbUbYkYS3Us-DpLZc2Hs34si_qKJgxs_81xpNBniXsBNFsYOt7g/exec';
-      const payload = new FormData();
-      payload.append('sheet', 'RSVP');
-      payload.append('name', formData.fullName);
-      payload.append('guests', formData.guests);
-      payload.append('dietary', formData.dietaryNotes);
-      payload.append('attendance', 'Yes');
+      if (!GOOGLE_SCRIPT_URL) throw new Error('Google Apps Script URL is not configured (VITE_GOOGLE_APPS_SCRIPT_URL).');
 
-      await fetch(scriptUrl, {
+      const payload = new URLSearchParams({
+        sheet: 'RSVP',
+        name: formData.fullName.trim(),
+        attendance: formData.attendance,
+        guests: formData.attendance === 'Yes' ? formData.guests : '0',
+        dietary: formData.dietaryNotes.trim(),
+        invite: getGuestDisplayName() || '',
+      });
+
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         body: payload,
       });
 
       setStatus('success');
-      setFormData({ fullName: '', guests: '1', dietaryNotes: '' });
+      setFormData({ fullName: '', attendance: 'Yes', guests: '1', dietaryNotes: '' });
     } catch (error) {
       console.error('Error sending RSVP: ', error);
+      toast.error('Could not send your RSVP. Please try again.');
       setStatus('error');
     }
   };
@@ -47,7 +54,7 @@ export const RSVPForm: React.FC = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="glass p-10 sm:p-14 lg:p-16 rounded-[3rem] border border-white/40 shadow-[0_30px_60px_rgba(176,137,104,0.1)] relative overflow-hidden bg-white/60 backdrop-blur-3xl lg:flex items-center gap-16"
+        className="glass p-10 sm:p-14 lg:p-16 rounded-[3rem] border border-white/40 shadow-[0_30px_60px_rgba(71,112,90,0.1)] relative overflow-hidden bg-white/60 backdrop-blur-3xl lg:flex items-center gap-16"
       >
         {/* Soft top border line */}
         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand-champagne via-brand-beige-deep/80 to-brand-champagne" />
@@ -121,6 +128,30 @@ export const RSVPForm: React.FC = () => {
                 </div>
 
                 <div>
+                  <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Will You Attend?</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { value: 'Yes', label: 'Joyfully Accept' },
+                      { value: 'No', label: 'Regretfully Decline' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, attendance: opt.value })}
+                        className={`px-4 py-3 rounded-full border text-sm font-serif italic transition-all duration-300 ${
+                          formData.attendance === opt.value
+                            ? 'bg-brand-beige-deep text-white border-brand-beige-deep shadow-md'
+                            : 'bg-white/80 text-stone-600 border-stone-200/60 hover:border-brand-beige-deep/40'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {formData.attendance === 'Yes' && (
+                <div>
                   <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Number of Guests</label>
                   <div className="relative group">
                     <select
@@ -139,6 +170,8 @@ export const RSVPForm: React.FC = () => {
                   </div>
                 </div>
 
+                )}
+
                 <div>
                   <label className="block text-[10px] uppercase tracking-[0.2em] font-bold text-stone-500 mb-3 ml-2">Dietary Notes (Optional)</label>
                   <textarea
@@ -153,12 +186,12 @@ export const RSVPForm: React.FC = () => {
                   <button
                     disabled={status === 'loading'}
                     type="submit"
-                    className="w-full bg-stone-800 text-brand-champagne py-5 rounded-full font-sans tracking-[0.3em] font-bold text-[11px] uppercase hover:bg-stone-900 transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70"
+                    className="w-full bg-gradient-to-r from-brand-beige to-brand-beige-deep text-white py-5 rounded-full font-sans tracking-[0.3em] font-bold text-[11px] uppercase hover:brightness-110 transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70"
                   >
                     {status === 'loading' ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      'Confirm Attendance'
+                      'Send Response'
                     )}
                   </button>
                 </div>

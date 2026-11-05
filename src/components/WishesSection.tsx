@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Loader2, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
+import { GOOGLE_SCRIPT_URL } from '../config';
 
 interface Wish {
   id: string;
@@ -24,20 +26,43 @@ export const WishesSection: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Load existing wishes from the Google Sheet
+  useEffect(() => {
+    if (!GOOGLE_SCRIPT_URL) return;
+    let cancelled = false;
+    fetch(`${GOOGLE_SCRIPT_URL}?action=wishes`)
+      .then((res) => res.json())
+      .then((data: { ok: boolean; wishes?: { name: string; message: string; createdAt: string }[] }) => {
+        if (cancelled || !data.ok || !data.wishes) return;
+        const loaded = data.wishes.map((w, i) => ({
+          id: `sheet-${i}-${w.createdAt}`,
+          name: w.name,
+          message: w.message,
+          createdAt: new Date(w.createdAt),
+        }));
+        setWishes((prev) => [...prev.filter((p) => !p.id.startsWith('sheet-')), ...loaded]);
+      })
+      .catch((err) => console.error('Could not load wishes:', err));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.message) return;
     setIsSubmitting(true);
 
     try {
-      // Send data to Google Sheets
-      const scriptUrl = 'https://script.google.com/macros/s/AKfycbyay20jbF63BRUj8JGGbUbYkYS3Us-DpLZc2Hs34si_qKJgxs_81xpNBniXsBNFsYOt7g/exec';
-      const payload = new FormData();
-      payload.append('sheet', 'Wishes');
-      payload.append('name', formData.name);
-      payload.append('message', formData.message);
+      if (!GOOGLE_SCRIPT_URL) throw new Error('Google Apps Script URL is not configured (VITE_GOOGLE_APPS_SCRIPT_URL).');
 
-      await fetch(scriptUrl, {
+      const payload = new URLSearchParams({
+        sheet: 'Wishes',
+        name: formData.name.trim(),
+        message: formData.message.trim(),
+      });
+
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         body: payload,
@@ -53,8 +78,10 @@ export const WishesSection: React.FC = () => {
       // Prepend the new wish to the list
       setWishes(prev => [newWish, ...prev]);
       setFormData({ name: '', message: '' });
+      toast.success('Your blessing has been shared!');
     } catch (error) {
       console.error('Error submitting wish: ', error);
+      toast.error('Could not send your wish. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -84,7 +111,7 @@ export const WishesSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="w-full glass p-8 sm:p-14 rounded-[3rem] border border-white/60 shadow-[0_30px_60px_rgba(176,137,104,0.1)] relative overflow-hidden bg-white/70 backdrop-blur-3xl mb-16"
+          className="w-full glass p-8 sm:p-14 rounded-[3rem] border border-white/60 shadow-[0_30px_60px_rgba(71,112,90,0.1)] relative overflow-hidden bg-white/70 backdrop-blur-3xl mb-16"
         >
           {/* Subtle top reflection line */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-beige to-transparent opacity-50" />
@@ -125,13 +152,13 @@ export const WishesSection: React.FC = () => {
               <button
                 disabled={isSubmitting}
                 type="submit"
-                className="w-full bg-stone-800 text-brand-champagne py-5 rounded-full font-sans tracking-[0.3em] font-bold text-[11px] uppercase hover:bg-stone-900 transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70"
+                className="w-full bg-gradient-to-r from-brand-beige to-brand-beige-deep text-white py-5 rounded-full font-sans tracking-[0.3em] font-bold text-[11px] uppercase hover:brightness-110 transition-all duration-300 shadow-[0_10px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.25)] active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    <Send className="w-4 h-4 text-brand-gold" />
+                    <Send className="w-4 h-4 text-brand-gold-light" />
                     Share Blessing
                   </>
                 )}
@@ -155,7 +182,7 @@ export const WishesSection: React.FC = () => {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-4 mb-4">
                   <h4 className="font-display text-2xl text-stone-800 tracking-tight pl-2">{wish.name}</h4>
                   <span className="text-[9px] uppercase tracking-[0.2em] text-stone-400 font-bold bg-white/60 px-3 py-1 rounded-full border border-stone-100/50">
-                    {wish.createdAt ? getRelativeTime(wish.createdAt) : 'just now'}
+                    {wish.createdAt && !isNaN(wish.createdAt.getTime()) ? getRelativeTime(wish.createdAt) : 'just now'}
                   </span>
                 </div>
                 <p className="text-stone-600 font-serif italic text-lg sm:text-lg leading-relaxed pl-2">
